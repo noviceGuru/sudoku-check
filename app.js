@@ -1,4 +1,4 @@
-const wrongSudoku5 = [
+const incorrectSudoku = [
 	[7, 9, 8, 3, 6, 4, 2, 1, 5],
 	[5, 4, 1, 9, 6, 2, 6, 8, 3],
 	[2, 3, 6, 8, 1, 5, 7, 9, 4],
@@ -40,7 +40,8 @@ const isSudokuCorrect = sudoku => {
 	// Check if all the rows are made of unique arrays
 	for (let i = 0; i < sudoku.length; i++) {
 		if (!isArrayUnique(sudoku[i])) {
-			return false
+			console.log(`Duplicate in row number ${i+1}`)
+			return "Incorrect Sudoku"
 		}
 	}
 
@@ -50,13 +51,29 @@ const isSudokuCorrect = sudoku => {
 		columnArray = []
 		for (let i = 0; i < sudoku.length; i++) // i is row
 			if (columnArray.includes(sudoku[i][j])) {
-				return false
+				console.log(`Duplicate in column: mistake at [${i}, ${j}] number: ${sudoku[i][j]}`)
+				return "Incorrect Sudoku"
 			} else {
 				columnArray.push(sudoku[i][j])
 			}
 	}
 
 	// Check if all the squares are made of unique arrays
+	for (let xSlice = 0; xSlice < 3; xSlice++) {
+		let rows = sudoku.slice(xSlice * 3, xSlice * 3 + 3)
+		for (let ySlice = 0; ySlice < 3; ySlice++) {
+			let cube = []
+			for (let i = 0; i < 3; i++) {
+				cube.push(rows[i].slice(ySlice * 3, ySlice * 3 + 3))
+			}
+			if (!isArrayUnique(cube)) {
+				console.log(`Incorrect square at ${xSlice, ySlice}`)
+				return "Incorrect Sudoku"
+			}
+		}
+	}
+
+	return "Correct Sudoku"
 }
 
 console.log(isSudokuCorrect(correctSudoku))
